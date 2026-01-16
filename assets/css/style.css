@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+}
+
+.container h1 {
+    color: rgb(0, 40, 80);
+}
+
+.create-task input,
+.create-task button {
+    border-radius: 10px;
+}
+
+.tasklist {
+    border-radius: 12px !important;
+}
+
+.badge-label {
+    font-size: 10px;
+}
+
+.date-text {
+    opacity: 50%;
+}
+
+.btn-group .btn {
+    font-size: 20px;
+}
+
+#update-btn{
+    background-color: rgb(0, 204, 222);
+    border: none;
+    outline: none;
+}
