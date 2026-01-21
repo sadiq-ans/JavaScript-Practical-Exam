@@ -2,113 +2,179 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Mangament System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Mangament System</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Basic Icons -->
-  <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
-  <!-- Filled Icons -->
-  <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet">
-  <!-- Brand Icons -->
-  <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet">
+    <!-- Basic Icons -->
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- Filled Icons -->
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet">
+
+    <!-- Brand Icons -->
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet">
+
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        .container h1 {
+            color: rgb(0, 40, 80);
+        }
+
+        .task-list01 li,
+        #task-list li {
+            background-color: white;
+        }
+    </style>
 </head>
 
 <body>
-  <section class="task-section">
-    <div class="container">
-      <div class="task-box">
-        <h1 class="text-center my-5 fw-bold">Task Mangament System</h1>
+    <section class="py-5">
+        <div class="container">
+            <h1 class="text-center my-5 fw-bold">Task Mangament System</h1>
 
-        <div class="create-task d-flex justify-content-center gap-2">
-          <input type="text" id="task-input" class="form-control" placeholder="Create task...">
-          <button id="add-task" class="btn btn-success"><i class='bx bx-plus'></i> </button>
+            <div class="create-task d-flex justify-content-center gap-2">
+                <input type="text" class="form-control" id="task-input" placeholder="Enter task" />
+                <button onclick="addTask()" class="btn btn-success"><i class='bx bx-plus'></i></button>
+                <button onclick="updateTask()" class="btn btn-warning">Update</button>
+            </div>
+
+            <div class="mt-5 p-4 border rounded shadow-sm bg-light">
+                <h2 class="mb-4 fw-semibold">All Tasks</h2>
+
+                <div class="filter-task d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="filter-options">
+                        <label class="form-label fw-medium" for="priorityFilter">
+                            Filter by Priority
+                        </label>
+                        <select id="priorityFilter" class="form-select" aria-label="Filter tasks by priority">
+                            <option value="" selected disabled>All Priorities</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <ul class="task-list01 pt-3">
+                    <li class="d-flex justify-content-between align-items-center border p-2 mb-2 rounded">
+                        <h4>Join meeting at 4PM</h4>
+                        <span>Tue Jan 16 2026</span>
+                        <div>
+                            <button class="btn btn-sm btn-warning me-1" onclick="editTask(`${index}`)">
+                                <i class='bx  bx-edit'></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteTask(`${index}`)">
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul class="pb-3" id="task-list"></ul>
+            </div>
+
         </div>
+    </section>
 
-        <div class="tasklist mt-5 p-4 border">
-          <h2 class="mt-2">All Task</h2>
-          <div class="filter-task d-flex justify-content-between align-items-center">
-            <div class="filter-options">
-              <select class="form-select form-select-lg mb-3" aria-label="Large select example">
-                <option selected disabled>View Task by Prioprity</option>
-                <option value="1">Low</option>
-                <option value="2">Medium</option>
-                <option value="3">High</option>
-              </select>
-            </div>
-          </div>
+    <!-- Libraries -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-          <div class="task">
-            <div class="task-head">
-              <h4 class="task-title my-4">Task 1 <span class="badge-label badge text-bg-secondary">Low</span></h4>
-              <p class="date-text">14/12/2025</p>
-            </div>
-            <div class="btn-group">
-              <button class="btn btn-primary" id="edit-btn">Edit</button>
-              <button class="btn btn-warning" id="read-btn">Read</button>
-              <button class="btn btn-info" id="update-btn">Update</button>
-              <button class="btn btn-danger" id="delete-btn">Delete</button>
-            </div>
-          </div>
+    <script>
+        const taskInput = document.getElementById("task-input");
+        const taskList = document.getElementById("task-list");
 
-          <div class="task">
-            <div class="task-head">
-              <h4 class="task-title my-4">Task 1 <span class="badge-label badge text-bg-secondary">Low</span></h4>
-              <p class="date-text">14/12/2025</p>
-            </div>
-            <div class="btn-group">
-              <button class="btn btn-primary" id="edit-btn">Edit</button>
-              <button class="btn btn-warning" id="read-btn">Read</button>
-              <button class="btn" id="update-btn">Update</button>
-              <button class="btn btn-danger" id="delete-btn">Delete</button>
-            </div>
-          </div>
-        </div>
+        let tasks = [];
+        let editIndex = null;
 
-      </div>
-    </div>
-  </section>
+        // CREATE or ADD
+        function addTask() {
+            const task = taskInput.value.trim();
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+            if (task === "") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Enter task...",
+                    text: "Before continue, Please enter a task!",
+                });
+                return;
+            }
 
-  <script>
-    let taskInput = document.getElementById("task-input").innerHTML;
-    console.log(taskInput)
+            tasks.push(task);
+            taskInput.value = "";
+            displayTasks();
+        }
 
-    // Add New Task
-    function addTask() {
-      let addTask = document.getElementById("add-task");
-    }
+        // READ or DISPLAY
+        function displayTasks() {
+            taskList.innerHTML = "";
+            const curDate = new Date().toDateString();
 
+            tasks.forEach((task, index) => {
+                taskList.innerHTML += `
+                <li class="d-flex justify-content-between align-items-center border p-2 mb-2 rounded">
+                    <h4>${task}</h4>
+                    <span>${curDate}</span>
+                    <div>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editTask(${index})">
+                            <i class='bx  bx-edit'></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${index})">
+                            Delete
+                        </button>
+                    </div>
+                </li>
+            `;
+            });
+        }
 
-    // Edit/Create Task
-    function editTask() {
-      let editTask = document.getElementById("edit-btn");
+        // EDIT
+        function editTask(index) {
+            taskInput.value = tasks[index];
+            editIndex = index;
+        }
 
-    }
+        // UPDATE
+        function updateTask() {
+            if (editIndex === null) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Select task...",
+                    text: "Before continue, Please Select a task to update",
+                });
+                return;
+            }
 
-    // Read Task
-    function displayTasks() {
-      let displayTasks = document.getElementById("read-btn");
+            const updatedTask = taskInput.value.trim();
 
-    }
+            if (updatedTask === "") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Check Task...",
+                    text: "Task cannot be empty",
+                });
+                return;
+            }
 
-    // Update Task
-    function updateTask() {
-      let updateTask = document.getElementById("update-btn");
+            tasks[editIndex] = updatedTask;
+            editIndex = null;
+            taskInput.value = "";
+            displayTasks();
+        }
 
-    }
+        // DELETE
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+    </script>
 
-    // Delete Task
-    function deleteTask() {
-      let deleteTask = document.getElementById("delete-btn");
-
-    }
-  </script>
 </body>
 
 </html>
